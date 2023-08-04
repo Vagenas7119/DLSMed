@@ -449,7 +449,7 @@ for(i in 3:ncol(cast_prop)){
 
 #dom_countries
 
-#unfortunately the unequeal sized columns should be assigned as below
+#arrange countries
 dom_countries1<-c(as.vector(na.omit(dom_countries[,1])))
 dom_countries2<-c(as.vector(na.omit(dom_countries[,2])))
 dom_countries3<-c(as.vector(na.omit(dom_countries[,3])))
