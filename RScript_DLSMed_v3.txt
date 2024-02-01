@@ -1,6 +1,6 @@
 ###Decoding the spread of non-indigenous fishes in the Mediterranean Sea
 
-###For inquiries contact to @Vagenas G. 2023 (g.vagenas@hcmr.gr) | (georgvagenas@gmail.com)
+###For inquiries contact to @Vagenas G. 2024 (g.vagenas@hcmr.gr) | (georgvagenas@gmail.com)
 
 #Required_Libraries
 
@@ -44,7 +44,7 @@ DATA<-orderBy(~ID+first_area_sighting, data=DATA)%>%filter(!DATA$first_area_sigh
 t_zero<-c(1,rep(0,length(DATA$ID)-1))
 for(i in 2:length(DATA$ID)){
   if(DATA$ID[i]==DATA$ID[i-1])
-    {t_zero[i]=0}
+  {t_zero[i]=0}
   else {t_zero[i]=1}
 }
 DATA<-data.frame(DATA,t_zero)
@@ -150,15 +150,15 @@ DATA<-data.frame(DATA,t_ten)
 DATA_momentum<-dplyr::select(DATA,!"ID" & !"Species" & !"first_area_sighting")
 
 DATA_momentum_country<-data.frame(DATA_momentum %>% 
-  group_by(country_id) %>% 
-  summarise(
-    t_zero= sum(t_zero),t_one=sum(t_one),t_two=sum(t_two),t_three=sum(t_three),t_four=sum(t_four),t_five=sum(t_five),t_six=sum(t_six),t_seven=sum(t_seven),t_eight=sum(t_eight),t_nine=sum(t_nine),t_ten=sum(t_ten)))
+                                    group_by(country_id) %>% 
+                                    summarise(
+                                      t_zero= sum(t_zero),t_one=sum(t_one),t_two=sum(t_two),t_three=sum(t_three),t_four=sum(t_four),t_five=sum(t_five),t_six=sum(t_six),t_seven=sum(t_seven),t_eight=sum(t_eight),t_nine=sum(t_nine),t_ten=sum(t_ten)))
 
 
 DATA_momentum_msfd<-data.frame(DATA_momentum %>% 
-                                    group_by(msfd_id) %>% 
-                                    summarise(
-                                      t_zero= sum(t_zero),t_one=sum(t_one),t_two=sum(t_two),t_three=sum(t_three),t_four=sum(t_four),t_five=sum(t_five),t_six=sum(t_six),t_seven=sum(t_seven),t_eight=sum(t_eight),t_nine=sum(t_nine),t_ten=sum(t_ten)))
+                                 group_by(msfd_id) %>% 
+                                 summarise(
+                                   t_zero= sum(t_zero),t_one=sum(t_one),t_two=sum(t_two),t_three=sum(t_three),t_four=sum(t_four),t_five=sum(t_five),t_six=sum(t_six),t_seven=sum(t_seven),t_eight=sum(t_eight),t_nine=sum(t_nine),t_ten=sum(t_ten)))
 
 #HEATMAP_Countries
 
@@ -178,6 +178,12 @@ DATA_momentum_country_m<-as.matrix(samp2)
 #either with melt
 heatmap_melt_c<-melt(DATA_momentum_country_m)
 
+#reorder from east to west (counter-clockwise)
+heatmap_melt_c$X1<-factor(heatmap_melt_c$X1,levels=c("EG","PS","IL","LB","SY","TR","CY","GR","AL","ME","HR","LY","IT","MT","TN","DZ","ES"))
+
+#save as .tiff
+tiff("deco_c.tiff", units="in", width=11, height=6, res=300)
+
 #NEW HEATMAP
 ggp_c <- ggplot(heatmap_melt_c, aes(X1, X2,fill=value)) +
   geom_tile(color = "white",
@@ -190,11 +196,11 @@ ggp_c <- ggplot(heatmap_melt_c, aes(X1, X2,fill=value)) +
   guides(fill = guide_colourbar(title = "NIS"))+
   geom_text(aes(label = value), color = "white", size = 6)+ 
   scale_y_discrete(labels=c(expression(t[0]),
-                                 expression(t[1]),
-                                 expression(t[2]),
-                                 expression(t[3]),
-                                 expression(t[4]),
-                                 expression(t[5]),
+                            expression(t[1]),
+                            expression(t[2]),
+                            expression(t[3]),
+                            expression(t[4]),
+                            expression(t[5]),
                             expression(t[6]),
                             expression(t[7]),
                             expression(t[8]),
@@ -202,6 +208,10 @@ ggp_c <- ggplot(heatmap_melt_c, aes(X1, X2,fill=value)) +
                             expression(t[10])))+ labs(x="Countries",y="Introductions (Momentum)")
 ggp_c<-ggp_c+theme_light()+theme(axis.text = element_text(size=12,face="bold"),axis.title.y = element_text(size=15,face="bold"),axis.title.x = element_text(size=15,face="bold"))
 ggp_c
+
+dev.off()
+
+#save as .tiff height 600 width 900
 
 #HEATMAP_MSFD
 
@@ -213,6 +223,11 @@ DATA_momentum_msfd_m<-as.matrix(samp2)
 
 #melt
 heatmap_melt_msfd<-melt(DATA_momentum_msfd_m)
+#reorder from east o west
+heatmap_melt_msfd$X1<-factor(heatmap_melt_msfd$X1,levels=c("EMED","CMED","ADRIA","WMED"))
+
+#save as .tiff
+tiff("deco_msfd.tiff", units="in", width=11, height=6, res=300)
 
 #NEW HEATMAP
 ggp_msfd <- ggplot(heatmap_melt_msfd, aes(X1, X2,fill=value)) +
@@ -236,8 +251,10 @@ ggp_msfd <- ggplot(heatmap_melt_msfd, aes(X1, X2,fill=value)) +
                             expression(t[8]),
                             expression(t[9]),
                             expression(t[10])))+ labs(x="MSFD",y="Introductions (Momentum)")
-ggp_msfd<-ggp_msfd+theme_light()+theme(axis.text = element_text(size=12,face="bold"),axis.title.y = element_text(size=15,face="bold"),axis.title.x = element_text(size=15,face="bold"))
+ggp_msfd<-ggp_msfd+theme_light()+theme(axis.text = element_text(size=10,face="bold"),axis.title.y = element_text(size=15,face="bold"),axis.title.x = element_text(size=10,face="bold"))
 ggp_msfd
+
+dev.off()
 
 ##Temporal analysis
 
@@ -400,6 +417,8 @@ step8<-expression(Δt^(t[8]-t[7]))
 step9<-expression(Δt^(t[9]-t[8]))
 step10<-expression(Δt^(t[10]-t[9]))
 
+#ecdf all
+tiff("deco_ecdf_i.tiff", units="in", width=9, height=9, res=300)
 
 #Cumulative density function of all cases #Tail probs #https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html
 CumDenDelta<-ggplot(DATA_momentum_year_delta_melted, aes(x=value, y =variable, fill = 0.5 - abs(0.5 - stat(ecdf)))) +
@@ -410,6 +429,9 @@ my_labels <- c(step1,step2,step3,step4,step5,step6,step7,step8,step9,step10)
 CumDenDelta<-CumDenDelta+scale_y_discrete(labels=my_labels)+ labs(y="Delta (Δ) of succesive momenta",x="Years")
 CumDenDelta<-CumDenDelta+theme(axis.title = element_text(size = 15),axis.text=element_text(size=12))
 CumDenDelta #Cumulative distribution to all
+
+dev.off()
+
 
 #MELT
 DATA_momentum_year_delta_melted<-melt(DATA_momentum_year_delta,na.rm = TRUE)
@@ -437,9 +459,9 @@ dom_countries<-data.frame(matrix(NA,ncol=10,nrow=5))
 #dom_countries<-rep(0,11)
 for(i in 3:ncol(cast_prop)){
   cast_prop<-cast_prop[order(-cast_prop[,i]),]
-    if(cast_prop[1,i]>0.5){
-      dom_countries[1,i-2]=c(rownames(cast_prop[1,]))
-    }else if(cast_prop[1,i]+cast_prop[2,i]>0.5){
+  if(cast_prop[1,i]>0.5){
+    dom_countries[1,i-2]=c(rownames(cast_prop[1,]))
+  }else if(cast_prop[1,i]+cast_prop[2,i]>0.5){
     dom_countries[1:2,i-2]=c(rownames(cast_prop[1,],),rownames(cast_prop[2,],))
   }else if(cast_prop[1,i]+cast_prop[2,i]+cast_prop[3,i]>0.5){
     dom_countries[1:3,i-2]=c(rownames(cast_prop[1,],),rownames(cast_prop[2,],),rownames(cast_prop[3,]))
@@ -479,6 +501,10 @@ dominant_melt_delta<-rbind(melt_t0_1,melt_t1_2,melt_t2_3,melt_t3_4,melt_t4_5,mel
 
 #run density function for dominant 
 
+
+#ecdf dom
+tiff("deco_ecdf_ii.tiff", units="in", width=9, height=9, res=300)
+
 #Cumulative density function #Tail probs #https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html
 
 CumDenDelta_dom<-ggplot(dominant_melt_delta, aes(x=value, y =variable, fill = 0.5 - abs(0.5 - stat(ecdf)))) +
@@ -488,6 +514,8 @@ my_labels <- c(step1,step2,step3,step4,step5,step6,step7,step8,step9,step10)
 CumDenDelta_dom<-CumDenDelta_dom+scale_y_discrete(labels=my_labels)+ labs(y="Delta (Δ) of succesive momenta | Dominant hotspots (>50%)",x="Years")
 CumDenDelta_dom<-CumDenDelta_dom+theme(axis.title = element_text(size = 15),axis.text=element_text(size=12))
 CumDenDelta_dom
+
+dev.off()
 
 #ANALYZE THE MEDIAN PER TIME STEP
 
@@ -514,6 +542,9 @@ for(i in 1:11){
 }
 
 Delta_median_process_cum$step_delta<-as.factor(Delta_median_process_cum$step_delta)
+
+#combination
+tiff("deco_combination.tiff", units="in", width=11, height=9, res=300)
 
 CumDenDelta_process<-ggplot(
   Delta_median_process_cum,
@@ -617,7 +648,7 @@ CumDenDelta_process<-ggplot(
 CumDenDelta_process
 CumDenDelta_process<-CumDenDelta_process+ labs(y="Cumulative median of Delta (Δ) of succesive momenta",x="Years")
 CumDenDelta_process
-CumDenDelta_process<-CumDenDelta_process+theme(axis.title = element_text(size = 15),axis.text=element_text(size=12),legend.title.align=0.5)
+CumDenDelta_process<-CumDenDelta_process+theme(axis.title = element_text(size = 15),axis.text=element_text(size=15),legend.title.align=0.5)
 CumDenDelta_process
 
 my_labels <- c(step0,step1,step2,step3,step4,step5,step6,step7,step8,step9,step10)
@@ -625,6 +656,8 @@ CumDenDelta_process<-CumDenDelta_process+scale_x_continuous(breaks=seq(0,30,2),l
 CumDenDelta_process<-CumDenDelta_process+scale_colour_discrete(name="Scenario",labels=c('MED NIS (>50%)', 'MED NIS (100%)'))
 CumDenDelta_process
 #width 850
+
+dev.off()
 
 #Convergence
 minus<-(Delta_median_process_cum$median_delta-Delta_median_process_cum_dom$median_delta)/Delta_median_process_cum$median_delta
