@@ -13,7 +13,7 @@ The ocean is dynamically changing due to the influence of climate processes and 
 alien species, Lessepsian migration, movement analysis, invasive fishes, Red Sea
 
 #### Citation (APA):
-Vagenas G., Karachle, PK., Oikonomou, A., Stoumboudi, M.Th., Zenetos A. (2024). Decoding the spread of non-indigenous fishes in the Mediterranean Sea. [Under Review - 2nd round]
-
+ Vagenas, G., Karachle, P.K., Oikonomou, A., Stoumboudi, M.Th. & Zenetos, A. Decoding the spread of non-indigenous fishes in the Mediterranean Sea. Sci Rep 14, 6669 (2024).
+ 
 #### DOI: 
-Pending
+https://doi.org/10.1038/s41598-024-57109-8
